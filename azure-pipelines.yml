@@ -9,7 +9,7 @@ trigger:
 jobs:
 - job: Deploy
 
-step:
+steps:
     - task: UseNode@1
     - bash: 
         npm install sfdx-cli --global
