@@ -6,14 +6,6 @@
 trigger:
 - master
 
-pr:
-
-branches:
-    include:
-    - master
-paths:
-    exclude:
-    - README.md
 jobs:
 - job: Deploy
 condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
