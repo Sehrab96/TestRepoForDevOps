@@ -5,16 +5,9 @@
 
 trigger:
 - master
-batch: "true"
-branches:
-    include:
-    - master
-paths:
-    exclude:
-    - README.md
-    - azure-pipelines.yml
+
 pr:
-autoCancel: "true"
+
 branches:
     include:
     - master
