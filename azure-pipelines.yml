@@ -5,24 +5,29 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: NodeTool@0 
+- task: NodeTool@0 #This task Installs NodeJS to work with Salesforce CLI as NPM.
   inputs:
-    versionSpec: '16.x' # replace this value with the version that you need for your project
+    versionSpec: '16.x' #Using Nodejs Version 16, please frequently update this as per SFDX requirements. 
   displayName: 'Install Node.js'
+
 - task: DownloadSecureFile@1
   name: jwtKey
   inputs:
-    secureFile: "server.key"
+    secureFile: "server.key" #This task gets the server.key file to use it when authorizing against the ORG.
   displayName: 'Get JWT Key'
-- script:
-    npm install --global sfdx-cli
+
+- script: #Let's Install latest version of Salesforce CLI.
+    npm install --global sfdx-cli 
   displayName: "Install Salesforce CLI"
-- script:
+
+- script: #Authorizing the ORG -> CONSUMER_KEY,USERNAME are Environment Variables & jwtKey.secureFilePath is the Secure File.
     sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --jwtkeyfile $(jwtKey.secureFilePath) --setalias myDevOrg
   displayName: "Authorise Salesforce Dev Org"
-- script:
+
+- script: #We have Authorized the Org, let's set the above as Default Org.
     sfdx force:config:set defaultusername=myDevOrg
   displayName: "Set default Org"
-- script:
+
+- script: #Finally Deployments.
     sfdx force:source:deploy -m ApexClass
   displayName: "Deploying Apex Class"
