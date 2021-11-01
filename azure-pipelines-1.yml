@@ -1,4 +1,7 @@
-FROM node
+image: appirio/dx:latest
 
-RUN npm install --gloval sfdx-cli && \
-  sfdx force --help
+pipelines:
+  default:
+    - step:
+      script:
+        - sfdx force --help
