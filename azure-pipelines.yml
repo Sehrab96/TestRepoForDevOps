@@ -9,7 +9,11 @@ steps:
   inputs:
     versionSpec: '16.x' # replace this value with the version that you need for your project
   displayName: 'Install Node.js'
-
+- task: DownloadSecureFile@1
+  name: caCertificate
+  inputs:
+    secureFile: "server.key"
+  displayName: 'Get Key'
 - script:
     npm install --global sfdx-cli
   displayName: "Install Salesforce CLI"
@@ -17,7 +21,7 @@ steps:
     sfdx help
   displayName: "Help SFDX"
 - script:
-    sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --jwtkeyfile ./server.key --setalias myOrg
+    sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --jwtkeyfile $(caCertificate.secureFilePath) --setalias myOrg
   displayName: "Authorise Salesforce DevHub"
 - script:
     sfdx force:config:set defaultusername=myOrg
