@@ -8,9 +8,7 @@ steps:
 - task: NodeTool@0 
   inputs:
     versionSpec: '8.x' # replace this value with the version that you need for your project
-- task: DownloadSecureFile@1
-  inputs:
-    secureFile: "jwt.key"
+    
 - script:
     sudo npm install --global sfdx-cli
   displayName: "Install Salesforce CLI"
