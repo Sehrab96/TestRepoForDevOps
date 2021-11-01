@@ -5,54 +5,42 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: sfpwowerscript-installsfdx-task@5
-  displayName: Install SFDX
 
-- task: sfpwowerscript-authenticateorg-task@7
-  displayName: Authenticate with DevHub
+- task: sfpwowerscript-installsfdx-task@6
   inputs:
-    method: JWT
-    jwt_key_file: server.key
-    username: $(SalesforceUsername)
-    alias: DevHub
+    isTelemetryEnabled: true
+
+- task: sfpwowerscript-authenticateorg-task@8
+  inputs:
+    method: 'Credentials'
+    username: '$(SalesforceUsername)'
+    password: '$(SalesforcePassword)'
+    securitytoken: '$(SalesforceSecurityToken)'
+    alias: 'AzureDevOpsScratchOrg'
     isdevhub: true
-    clientid: $(SalesforceClientId)
     isTelemetryEnabled: true
 
-- task: sfpwowerscript-authenticateorg-task@7
-  displayName: Authenticate with ScratchOrg
+- task: sfpowerscript-deploysourcetoorg-task@7
   inputs:
-    method: JWT
-    jwt_key_file: server.key
-    username: $(ScratchOrgUsername)
-    alias: MyScratchOrg
-    isdevhub: false
-    clientid: $(SalesforceClientId)
-    isTelemetryEnabled: true
-
-- task: sfpowerscript-deploysourcetoorg-task@5
-  displayName: Deploy source to scratch org
-  inputs:
-    project_directory: src
-    target_org: MyScratchOrg
+    target_org: 'AzureDevOpsScratchOrg'
+    project_directory: './'
     source_directory: 'force-app'
     checkonly: false
     wait_time: '20'
     testlevel: 'NoTestRun'
+    isToBreakBuildIfEmpty: true
     isTelemetryEnabled: true
 
-- task: sfpwowerscript-triggerapextest-task@3
-  displayName: Run Apex Unit Tests
+- task: sfpwowerscript-triggerapextest-task@6
   inputs:
-    target_org: 'MyScratchOrg'
-    testlevel: 'RunLocalTests'
+    target_org: 'AzureDevOpsScratchOrg'
+    testlevel: 'RunAllTestsInOrg'
     wait_time: '60'
-    synchronous: false
     isTelemetryEnabled: true
 
-- task: sfpwowerscript-validateapextestcoverage-task@2
-  displayName: Validate 90% Apex Test Code Coverage
+
+- task: sfpwowerscript-validateapextestcoverage-task@3
   inputs:
-    target_org: 'MyScratchOrg'
-    test_coverage: '90'
+    target_org: 'AzureDevOpsScratchOrg'
+    test_coverage: '75'
     isTelemetryEnabled: true
