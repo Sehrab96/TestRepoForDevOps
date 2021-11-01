@@ -13,18 +13,15 @@ steps:
   name: jwtKey
   inputs:
     secureFile: "server.key"
-  displayName: 'Get Key'
+  displayName: 'Get JWT Key'
 - script:
     npm install --global sfdx-cli
   displayName: "Install Salesforce CLI"
 - script:
-    sfdx help
-  displayName: "Help SFDX"
+    sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --jwtkeyfile $(jwtKey.secureFilePath) --setalias myDevOrg
+  displayName: "Authorise Salesforce Dev Org"
 - script:
-    sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --jwtkeyfile $(jwtKey.secureFilePath) --setalias myOrg
-  displayName: "Authorise Salesforce DevHub"
-- script:
-    sfdx force:config:set defaultusername=myOrg
+    sfdx force:config:set defaultusername=myDevOrg
   displayName: "Set default Org"
 - script:
     sfdx force:source:deploy -m ApexClass
