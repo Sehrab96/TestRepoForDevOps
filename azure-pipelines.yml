@@ -17,7 +17,7 @@ steps:
     sfdx help
   displayName: "Help SFDX"
 - script:
-    sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --setdefaultdevhubusername --jwtkeyfile ./server.key
+    sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --jwtkeyfile ./server.key
   displayName: "Authorise Salesforce DevHub"
 - script:
     sfdx force:source:deploy -m ApexClass
