@@ -21,5 +21,7 @@ steps:
   displayName: "Authorise Salesforce DevHub"
 - script:
     sfdx force:config:set defaultusername=myOrg
+  displayName: "Set default Org"
+- script:
     sfdx force:source:deploy -m ApexClass
   displayName: "Deploying Apex Class"
