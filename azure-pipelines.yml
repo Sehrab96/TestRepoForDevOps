@@ -10,7 +10,7 @@ steps:
     versionSpec: '16.x' # replace this value with the version that you need for your project
   displayName: 'Install Node.js'
 - task: DownloadSecureFile@1
-  name: caCertificate
+  name: jwtKey
   inputs:
     secureFile: "server.key"
   displayName: 'Get Key'
@@ -21,7 +21,7 @@ steps:
     sfdx help
   displayName: "Help SFDX"
 - script:
-    sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --jwtkeyfile $(caCertificate.secureFilePath) --setalias myOrg
+    sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --jwtkeyfile $(jwtKey.secureFilePath) --setalias myOrg
   displayName: "Authorise Salesforce DevHub"
 - script:
     sfdx force:config:set defaultusername=myOrg
