@@ -19,3 +19,6 @@ steps:
 - script:
     sfdx force:auth:jwt:grant --clientid $(CONSUMER_KEY) --username $(USERNAME) --setdefaultdevhubusername --setalias DevHub --jwtkeyfile ./server.key
   displayName: "Authorise Salesforce DevHub"
+- script:
+    sfdx force:source:deploy -m ApexClass
+  displayName: "Deploying Apex Class"
